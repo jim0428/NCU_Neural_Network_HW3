@@ -21,17 +21,20 @@ def train_model(train_finish):
     #可以改成用try catch看回傳值決定輸出結果
     train_finish.set("訓練完成")
    
-def test_predict(interation,test_finish):
+def test_predict(interation,test_finish,noise):
     global origin_data,predict,row_num,col_num
     test_data,row_num,col_num = Dataprocessor.convert_to_row(test_file_url)
-    origin_data = test_data.copy()
 
+    if noise: test_data = model.make_noise(test_data)
+
+    origin_data = test_data.copy()
     predict = model.test(interation,test_data,row_num,col_num)
 
     test_finish.set("共有{}筆資料".format(len(predict)))
 
-def print_result(f,canvas,item_num):
+def print_result(f,canvas,item_num,noise):
     f.clear()
+
     axes1 = f.add_subplot(331)
     axes2 = f.add_subplot(332)
     axes3 = f.add_subplot(333)
@@ -120,16 +123,22 @@ def main():
     interation = tk.Entry(window)
     interation.place(x = 120,y = 120)
 
-    tk.Button(window, text='開始預測',command= lambda: test_predict(int(interation.get()),test_finish)).place(x = 120,y = 150)
+    noise = tk.IntVar()
 
-    tk.Label(window, textvariable=test_finish).place(x=180, y=150)
+    tk.Checkbutton(window, text='是否要加入雜訊',
+                                variable=noise,
+                                onvalue=1, offvalue=0).place(x = 90,y = 150)
+
+    tk.Button(window, text='開始預測',command= lambda: test_predict(int(interation.get()),test_finish,noise.get())).place(x = 120,y = 180)
+
+    tk.Label(window, textvariable=test_finish).place(x=180, y=180)
 
     #輸入預測第幾個資料
-    tk.Label(window, text='test_item:').place(x = 20,y = 180)
+    tk.Label(window, text='test_item:').place(x = 20,y = 210)
     item_num = tk.Entry(window)
-    item_num.place(x = 120,y = 185)
+    item_num.place(x = 120,y = 215)
 
-    tk.Button(window, text='輸出',command= lambda: print_result(f,canvas,int(item_num.get()) - 1)).place(x = 120,y = 210)
+    tk.Button(window, text='輸出',command= lambda: print_result(f,canvas,int(item_num.get()) - 1,noise.get())).place(x = 120,y = 240)
     
 
     window.mainloop()

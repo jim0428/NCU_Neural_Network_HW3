@@ -31,25 +31,27 @@ class Hopfiled:
         self.theta = theta
         self.dim = dim
 
-        
-
     # test
     def test(self,epochs,test_data,row_num,col_num):
-        #這三行應該要從外面傳入，不應該寫在這裡
-        #w,theta,dim = self.train(train_url)
-        #test_data,row_num,col_num = Dataprocessor.convert_to_row(self.test_url)
-
-        # ans will be stored in result
         predict = []
 
         # test
         for num in range(len(test_data)):
             for _ in range(epochs):  # every test_data will iterate epoch times
                 for pos in range(len(test_data[num])): 
-                    re_w = np.array(self.w[pos]).reshape(self.dim,1).transpose()     # w.T
-                    re_test_data = np.array(test_data[num]).reshape(self.dim,1) # x
-                    sgn = np.sign(re_w.dot(re_test_data) - self.theta[pos])     # w.T * x - theta
+                    re_w = np.array(self.w[pos]).reshape(self.dim,1).transpose() # w.T
+                    re_test_data = np.array(test_data[num]).reshape(self.dim,1)  # x
+                    sgn = np.sign(re_w.dot(re_test_data) - self.theta[pos])      # w.T * x - theta
                     test_data[num][pos] = sgn
 
             predict.append(np.array(test_data[num]).reshape(row_num,col_num)) #12 9 還需要改
         return predict
+
+    def make_noise(self,test_data):
+        noise = [np.random.normal(np.mean(test_data[i]), np.std(test_data[i]), test_data[i].shape) for i in  range(len(test_data))]
+        # noise + 原圖
+        gaussian_out = test_data + noise
+        # 所有值必須介於 0~1 之間，超過1 = 1，小於0 = 0
+        gaussian_out = np.clip(gaussian_out, 0, 1)
+
+        return gaussian_out
