@@ -24,20 +24,3 @@ class Dataprocessor:
             f.close()
         return np.array(result),row_num,col_num
 
-    def readfile(url):
-        read = open(url)
-        file = read.readlines()
-        read.close()
-        return file
-
-    def text_to_numlist(dataset):
-        """load text dataset to numeracial list dataset
-
-        Args:
-            dataset (string): txt or other file
-
-        Returns:
-            dataset: float_list
-        """
-        dataset = [list(map(float,data)) for data in dataset]
-        return dataset

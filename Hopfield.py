@@ -9,9 +9,7 @@ class Hopfiled:
     #Before training, need to calulate w and theta
     #Then train
     def train(self,train_data,isTheta):
-        #train_data,_,_ = Dataprocessor.convert_to_row(url) # get training data
-
-        #calculate w
+        
         dim = len(train_data[0])
         input_size = len(train_data)
 

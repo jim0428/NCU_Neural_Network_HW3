@@ -85,7 +85,7 @@ def main():
     
     window.geometry("1000x500+200+300")
 
-    window.title('類神經網路-作業二')
+    window.title('類神經網路-作業三')
     #選擇檔案
     train_file_name = tk.StringVar()   # 設定 text 為文字變數
     train_file_name.set('')            # 設定 text 的內容
