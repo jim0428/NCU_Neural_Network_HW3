@@ -8,7 +8,7 @@ class Hopfiled:
 
     #Before training, need to calulate w and theta
     #Then train
-    def train(self,train_data):
+    def train(self,train_data,isTheta):
         #train_data,_,_ = Dataprocessor.convert_to_row(url) # get training data
 
         #calculate w
@@ -24,8 +24,9 @@ class Hopfiled:
             re_sgl_train = np.array(single_train).reshape(dim,1)
             w = w + ((1 / dim) * (re_sgl_train.dot(re_sgl_train.T)))
         w = w - ((input_size / dim) * np.eye(dim))
-        for w_pos in range(len(w)):
-            theta[w_pos] = np.sum(w[w_pos])
+        if isTheta:
+            for w_pos in range(len(w)):
+                theta[w_pos] = np.sum(w[w_pos])
 
         self.w = w
         self.theta = theta

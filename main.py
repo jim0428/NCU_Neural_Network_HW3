@@ -11,12 +11,12 @@ import matplotlib.patches as patches
 from Hopfield import Hopfiled
 import numpy as np
 
-def train_model(train_finish):
+def train_model(train_finish,isTheta):
     global model,train_data
     train_data,_,_ = Dataprocessor.convert_to_row(train_file_url) # get training data
     model = Hopfiled(train_file_url,test_file_url)
 
-    model.train(train_data)
+    model.train(train_data,isTheta)
     
     #可以改成用try catch看回傳值決定輸出結果
     train_finish.set("訓練完成")
@@ -47,9 +47,6 @@ def print_result(f,canvas,item_num,noise):
 
     cmapmine = ListedColormap(['w', 'b'], N=2)
 
-    # Plot matrix
-    #print(predict[0])
-    #fig, (ax1,ax2) = plt.subplots(1, 2)
     axes1.imshow(origin, cmap=cmapmine, vmin=0, vmax=1)
     axes1.set_title('input')
     axes2.imshow(predict[item_num], cmap=cmapmine, vmin=0, vmax=1)
@@ -114,7 +111,13 @@ def main():
 
     tk.Label(window, textvariable=test_file_name).place(x=180, y=50)
 
-    tk.Button(window, text='開始訓練', command= lambda: train_model(train_finish)).place(x = 120,y = 80)
+    theta = tk.IntVar()
+
+    tk.Checkbutton(window, text='是否要加入theta',
+                            variable=theta,
+                            onvalue=1, offvalue=0).place(x = 5,y = 80)
+
+    tk.Button(window, text='開始訓練', command= lambda: train_model(train_finish,theta.get())).place(x = 120,y = 80)
 
     tk.Label(window, textvariable=train_finish).place(x=180, y=85)
 
@@ -124,7 +127,7 @@ def main():
     interation.place(x = 120,y = 120)
 
     noise = tk.IntVar()
-
+    
     tk.Checkbutton(window, text='是否要加入雜訊',
                                 variable=noise,
                                 onvalue=1, offvalue=0).place(x = 90,y = 150)
